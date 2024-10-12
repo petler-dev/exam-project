@@ -11,7 +11,6 @@ $successMessage = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
-    // Если нажата кнопка регистрации
     if (isset($_POST['register'])) {
         $name = trim($_POST['name']);
         $email = trim($_POST['email']);
@@ -132,8 +131,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
 
         <hr>
-
-        <!-- Форма регистрации -->
         <form action="index.php" method="POST" onsubmit="showLoader()">
             <h3>Register</h3>
             <div class="form-group">
@@ -152,10 +149,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
     </div>
 
-    <!-- Скрипт для отображения лоадера при отправке формы -->
     <script>
         function showLoader() {
-            // Показываем лоадер
             document.querySelector('.loader-wrapper').style.display = 'flex';
         }
     </script>
