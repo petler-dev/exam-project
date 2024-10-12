@@ -1,16 +1,14 @@
 <?php
-// Включение отображения ошибок для отладки
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 session_start();
-require 'db/db.php'; // Подключаем базу данных
+require 'db/db.php';
 
 $errors = [];
 $successMessage = '';
 
-// Проверяем, что форма была отправлена
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     // Если нажата кнопка регистрации
@@ -19,7 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $email = trim($_POST['email']);
         $password = trim($_POST['password']);
         
-        // Валидация данных
         if (empty($name) || strlen($name) < 3) {
             $errors[] = "Name must be at least 3 characters long.";
         }
@@ -35,28 +32,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isEmailExists($email)) {
             $errors[] = "This email is already registered.";
         }
-
-        // Если нет ошибок, сохраняем пользователя
         if (empty($errors)) {
             saveToDatabase($name, $email, $password);
             $successMessage = "Registration successful! You can now login.";
         }
     }
 
-    // Если нажата кнопка входа
     if (isset($_POST['login'])) {
         $email = trim($_POST['email']);
         $password = trim($_POST['password']);
 
-        // Получаем пользователя по email
         $user = getUserByEmail($email);
 
-        // Проверяем корректность данных
+
         if (!$user || !password_verify($password, $user['password'])) {
             $errors[] = "Invalid email or password.";
         } else {
             $_SESSION['user'] = $email;
-            header('Location: dashboard.php'); // Перенаправляем на дашборд после успешного входа
+            header('Location: dashboard.php');
             exit;
         }
     }
@@ -71,15 +64,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Login and Registration</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* Стили для лоадера */
         .loader {
-            border: 8px solid #f3f3f3; /* Светлый фон лоадера */
-            border-top: 8px solid #3498db; /* Цвет анимации */
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
             border-radius: 50%;
             width: 60px;
             height: 60px;
-            animation: spin 1s linear infinite; /* Анимация вращения */
-            display: none; /* По умолчанию лоадер скрыт */
+            animation: spin 1s linear infinite;
+            display: none;
         }
 
         @keyframes spin {
@@ -87,7 +79,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             100% { transform: rotate(360deg); }
         }
 
-        /* Центрируем лоадер */
         .loader-wrapper {
             display: flex;
             justify-content: center;
@@ -104,8 +95,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 </head>
 <body>
-
-    <!-- Лоадер -->
     <div class="loader-wrapper">
         <div class="loader"></div>
     </div>
@@ -113,7 +102,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="container mt-5">
         <h2 class="text-center mb-4">Login and Registration</h2>
 
-        <!-- Вывод ошибок, если есть -->
         <?php if (!empty($errors)): ?>
             <div class="alert alert-danger">
                 <ul>
@@ -124,14 +112,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         <?php endif; ?>
 
-        <!-- Вывод сообщения об успешной регистрации -->
         <?php if ($successMessage): ?>
             <div class="alert alert-success">
                 <?php echo $successMessage; ?>
             </div>
         <?php endif; ?>
 
-        <!-- Форма входа -->
         <form action="index.php" method="POST" onsubmit="showLoader()">
             <h3>Login</h3>
             <div class="form-group">

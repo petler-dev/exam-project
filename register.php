@@ -10,7 +10,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
 
-    // Проверка формы
     if (empty($name) || strlen($name) < 3) {
         $errors[] = "Name must be at least 3 characters long.";
     }
@@ -23,16 +22,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Password must be at least 6 characters long.";
     }
 
-    // Проверка на существование email
     if (isEmailExists($email)) {
         $errors[] = "This email is already registered.";
     }
 
-    // Если нет ошибок, сохраняем пользователя
     if (empty($errors)) {
         saveToDatabase($name, $email, $password);
         $successMessage = "Registration successful! Your data has been saved.";
-        // Перенаправление на другую страницу после успешной регистрации
         $_SESSION['user'] = $email;
         header('Location: dashboard.php');
         exit;

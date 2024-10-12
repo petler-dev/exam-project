@@ -1,7 +1,7 @@
 <?php
-$host = 'fdb1029.awardspace.net';
-$dbname = '4539042_db';
-$username = '4539042_db';
+$host = 'localhost';
+$dbname = 'ypetl240_db_php';
+$username = 'ypetl240_db';
 $password = 'Xxcse45erdxcC';
 
 try {
@@ -11,7 +11,6 @@ try {
     die("Database connection failed: " . $e->getMessage());
 }
 
-// Функция для сохранения пользователя в базу данных
 function saveToDatabase($name, $email, $password) {
     global $pdo;
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
@@ -19,7 +18,6 @@ function saveToDatabase($name, $email, $password) {
     $stmt->execute(['name' => $name, 'email' => $email, 'password' => $hashedPassword]);
 }
 
-// Функция для проверки существующего email
 function isEmailExists($email) {
     global $pdo;
     $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
@@ -27,7 +25,6 @@ function isEmailExists($email) {
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-// Функция для получения пользователя по email
 function getUserByEmail($email) {
     global $pdo;
     $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
